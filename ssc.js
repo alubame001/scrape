@@ -14,7 +14,7 @@ var db = require("mongoose");
 var conn = db.connect('mongodb://localhost/rest');   
 
 */
-var sleepTime = 10000;
+var sleepTime = 30000;
 var url = "http://caipiao.163.com/order/jczq/spfmixp.html"
 var SPFUrl = "http://caipiao.163.com/order/jczq-dcjs/"
 var TwoXOneUrl = "http://caipiao.163.com/order/jczq-dcjs/"
@@ -26,7 +26,9 @@ var CqSscUrl ="http://caipiao.163.com/award/cqssc/"  //重庆时时彩
 var Kl8Url ="http://caipiao.163.com/award/kl8/"  //快乐8时时彩
 var JxSScUrl ="http://caipiao.163.com/award/kl8/"  //新时时彩
 //var ShSScUrl ="http://cp.swlc.sh.cn/notice/ssl/index.html"  //上海时时彩
+var kl8sn = 0
 function loop(){
+
 	async.forEach([0], function(val, cb) {
 	//async.forEach([1, 2,3,4,5,6], function(val, cb) {
 	//async.forEach([1, 2,3,4,5], function(val, cb) {
@@ -36,8 +38,8 @@ function loop(){
 		switch(val){
 
 		case 0: GetDataFromUrl(Kl8Url);
-		case 1: GetDataFromUrl(CqSscUrl);
-		case 2: GetDataFromUrl(JxSScUrl);
+		//case 1: GetDataFromUrl(AiCaiUrl);
+		//case 2: GetDataFromUrl(JxSScUrl);
 		//case 1: GetDataFromUrl(SPFUrl);
 		//case 2: GetDataFromUrl(JinQiuUrl);
 		//case 3: GetDataFromUrl(BanQuanUrl);
@@ -107,7 +109,7 @@ function SendForm(data){
         method: "POST",
         host: "localhost",
         port: 80,
-        path: "/race",
+        path: "/race/incoming",
         headers: {
             "Content-Type": 'application/x-www-form-urlencoded',
             "Content-Length": data.length
@@ -137,7 +139,7 @@ function SendDataTo(data,router){
         method: "POST",
         host: "localhost",
         port: 80,
-        path: "/"+router,
+        path: "/"+router+"/incoming",
         headers: {
             "Content-Type": 'application/x-www-form-urlencoded',
             "Content-Length": data.length
@@ -543,13 +545,14 @@ function ParseKl8(str){
 			console.log('data-win-number:',$(this).attr('matchball'));
 
 			var json={};
+
 			json.symbol= "kl8"
 			json.sn = $(this).text()
 			json.win_number= $(this).attr('matchball')
 
 			console.log("json:",json)
 			SendDataTo(json,"ssc")				
-
+			
 		};
 	
 		
